@@ -1,0 +1,31 @@
+
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title><TMPL_VAR DOORLOG.DOOR_TITLE></title>
+    <meta name="viewport" content="width=600, initial-scale=1">
+    <link rel="stylesheet" href="/plugins/SPC/themes/LoxoneClassic.css" />
+</head>
+<body>
+
+<!-- Start of first page: #current -->
+<div data-role="page" id="start">
+	
+
+	<div role="main" class="ui-content">
+	<div class="ui-body ui-body-a ui-corner-all">
+		<table border=0 width="100%">
+		<tr>
+			<td colspan=2 style="text-align: center; vertical-algin: middle">
+			<span style="font-size: 2em; font-weight: bold"><TMPL_VAR DOORLOG.DOOR_TITLE></span>
+			<br>
+			<span style="color: darkgrey"><TMPL_VAR DOORLOG.DOOR_TIME>: <TMPL_VAR NAME=TIME><br></span>
+			<span style="color: darkgrey"><TMPL_VAR DOORLOG.DOOR_TEXT></span>
+			</td>
+		</tr>
+		<tr>
+			<td width="50%" style="text-align: right; vertical-algin: top">
+			<span style="vertical-align: middle; font-size: 4em; font-weight: bold"></span>
+			</td>
+		</tr>

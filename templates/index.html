@@ -1,0 +1,155 @@
+<h2>Settings Vanderbilt - SPC EDP Protokoll</h2>
+<hr>
+	<form method="post" data-ajax="false" name="main_form" id="main_form" action="index.cgi">
+		<input type="hidden" name="save" value="save">
+			<div class="form-group">
+				<table class="formtable" border="0" width="100%">
+					<tr>
+						<td width="25%">
+							<label id="labelip"><b><TMPL_VAR BASIC.SPC_EDPZentralenID></b></label>
+						</td>
+						<td width="50%">
+							<input  name="EDPZentralenID" type="text" class="textfield"
+								value="<TMPL_VAR NAME=EDPZentralenID>" data-validation-error-msg="* Please enter EDP Zentralen ID">
+						</td>
+						<td width="25%">
+							&nbsp;
+							<font size="-1"><TMPL_VAR BASIC.SPC_HEDPZentralenID></font>
+						</td>
+					</tr>
+						<tr>
+						<td width="25%">
+							<label id="labeledpport"><b><TMPL_VAR BASIC.SPC_EDP></b></label>
+						</td>
+						<td width="50%">
+							<input  name="EDP_Port" type="text" class="textfield"
+								value="<TMPL_VAR NAME=EDPPORT>" data-validation-error-msg="* Please enter EDP-Port for SPC">
+						</td>
+						<td width="25%">
+							&nbsp;
+							<font size="-1"><TMPL_VAR BASIC.SPC_HEDP></font>
+						</td>
+					</tr>
+					
+					<tr>
+						<td width="25%">
+							<label id="labelmsenabled"><b><TMPL_VAR BASIC.SPC_HTTPSEND></b></label>
+						</td>
+						<td width="50%">
+						<table border=0>
+							<tr><td>
+							  <fieldset>
+								 <select id="sendhtml" name="HTTP_Send" data-role="flipswitch" >
+									<option value="0"<TMPL_VAR NAME=HTTPSENDNO>>Aus</option><option value="1" <TMPL_VAR NAME=HTTPSENDYES>>Ein</option>\n
+								</select>  
+								
+							  </fieldset>
+							</td><td>
+									
+							</td><td>
+								<a id="button" data-icon="info" data-role="button" data-inline="true" data-mini="false" 
+									href="<TMPL_VAR NAME=LOGHTTP>" 
+									target="_blank">Logdatei</a>	
+							</td></tr>
+						</table>
+						</td>
+						<td width="25%">
+							&nbsp;
+							<font size="-1"><TMPL_VAR BASIC.SPC_HHTTPSEND></font>
+						</td>
+					</tr>
+					
+					<tr>
+						<td width="25%">
+							<label id="labelmsenabled"><b><TMPL_VAR BASIC.SPC_HTML></b></label>
+						</td>
+						<td width="50%">
+						<table border=0>
+							<tr><td>
+							  <fieldset>
+								 <select id="sendhtml" name="sendhtml" data-role="flipswitch" disabled=disabled>
+									<option value="0">Aus</option>
+									<option selected=selected value="1">Ein</option>
+									</select>
+							  </fieldset>
+							</td><td>
+									&nbsp;&nbsp;<font size="-1">URL: <a href="<TMPL_VAR NAME=WEBSITE>" target=_blank"><TMPL_VAR NAME=WEBSITE></a></font>
+							</td></tr>
+						</table>
+						</td>
+						<td width="25%">
+							&nbsp;
+							<font size="-1"><TMPL_VAR BASIC.SPC_HHTML></font>
+						</td>
+					</tr>
+					<tr>
+						<td width="25%">
+							<label id="labelmsenabled"><b><TMPL_VAR BASIC.SPC_LOG></b></label>
+						</td>
+						<td width="50%">
+						<table border=0>
+							<tr><td>
+							 
+							</td><td>
+									&nbsp;&nbsp;<font size="-1">URL: <a href="<TMPL_VAR NAME=WEBSITELOG>" target=_blank"><TMPL_VAR NAME=WEBSITELOG></a></font>
+							</td></tr>
+						</table>
+						</td>
+						<td width="25%">
+							&nbsp;
+							<font size="-1"><TMPL_VAR BASIC.SPC_HLOG></font>
+						</td>
+					</tr>
+					
+					<tr>
+						<td width="25%">
+							&nbsp;
+						</td>
+						<td width="50%">
+							<center>
+								<a id="btncancel" data-role="button" data-inline="true" data-mini="true" data-icon="delete" href="./index.cgi?form=1">Abbrechen</a>
+								<button type="submit" form="main_form" id="do" data-role="button" data-inline="true" data-mini="true" data-icon="check">Speichern</button>
+							</center>
+						</td>
+						
+					</tr>	
+				</table>
+				<table class="formtable" border="0" width="100%">
+					
+					<hr>
+					<tr>
+						<td width="25%">
+							<b><TMPL_VAR BASIC.SPC_SERVER> <TMPL_VAR NAME=SERVER></b>
+						</td>
+						<td colspan=2 width="50%">
+							<a id="button" data-icon="check" data-role="button" data-inline="true" data-mini="false" href="./index.cgi?start=1">Start</a>
+							<a id="button" data-icon="delete" data-role="button" data-inline="true" data-mini="false" href="./index.cgi?stop=1">Stop</a>
+							<a id="button" data-icon="check" data-role="button" data-inline="true" data-mini="false" href="./index.cgi?restart=1">Restart</a>
+							<a id="button" data-icon="info" data-role="button" data-inline="true" data-mini="false" 
+								href="<TMPL_VAR NAME=LOGSYSMONITOR>" 
+								target="_blank">Logdatei</a>
+						</td>
+						<td width="25%">
+							<TMPL_VAR BASIC.SPC_HSERVER>
+						</td>
+					</tr>	
+						
+					<tr>
+						<td width="25%">
+							&nbsp;
+						</td>
+						<tr>
+							<td width="25%">
+								<b><TMPL_VAR BASIC.SPC_RESET></b>
+							</td>
+							<td colspan=2 width="50%">
+								<a id="button" data-icon="delete" data-role="button" data-inline="true" data-mini="false" href="./index.cgi?reset=1">Reset</a>
+							</td>
+							<td width="25%">
+								<TMPL_VAR BASIC.SPC_HRESET>
+							</td>
+						</tr>	
+					</tr>
+			</tabel>
+		</div>
+	</form>
