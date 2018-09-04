@@ -24,11 +24,10 @@ $UDP_Port = %pcfg{'MAIN.UDP_Port'};
 #$UDP_Send_Enable = %pcfg{'MAIN.UDP_Send_Enable'};
 $HTTP_Send_Enable = %pcfg{'MAIN.HTTP_Send_Enable'};
 %miniservers = LoxBerry::System::get_miniservers();
+$LOX_Name = $miniservers{1}{Name};
 $LOX_IP = $miniservers{1}{IPAddress};
-$LOX_User = $miniservers{1}{Admin_RAW};
-$LOX_PW = $miniservers{1}{Pass_RAW};
-$LoxHTTPGet_BASE = "http://$LOX_User:$LOX_PW\@$LOX_IP/dev/sps/io";
-
+$LOX_User = $miniservers{1}{Admin};
+$LOX_PW = $miniservers{1}{Pass};
 
 # Create my logging object
 my $log = LoxBerry::Log->new ( 
@@ -37,6 +36,45 @@ my $log = LoxBerry::Log->new (
 	append => 1
 	);
 LOGSTART "SPC Status Abfrage HTML/index.cgi start";
+
+# Loxone HA-Miniserver by Marcel Zoller	
+if($LOX_Name eq "lxZoller1"){
+	# Loxone Minisever ping test
+	LOGOK " Loxone Zoller HA-Miniserver";
+	#$LOX_IP="172.16.200.7"; #Testvariable
+	#$LOX_IP='172.16.200.6'; #Testvariable
+	$p = Net::Ping->new();
+	$p->port_number("80");
+	if ($p->ping($LOX_IP,2)) {
+				LOGOK "Ping Loxone: Miniserver1 is online.";
+				LOGOK "Ping Loxone: $p->ping($LOX_IP)";
+				$p->close();
+			} else{ 
+				LOGALERT "Ping Loxone: Miniserver1 not online!";
+				LOGDEB "Ping Loxone: $p->ping($LOX_IP)";
+				$p->close();
+				
+				$p = Net::Ping->new();
+				$p->port_number("80");
+				$LOX_IP = $miniservers{2}{IPAddress};
+				$LOX_User = $miniservers{2}{Admin};
+				$LOX_PW = $miniservers{2}{Pass};
+				#$LOX_IP="172.16.200.6"; #Testvariable
+				if ($p->ping($LOX_IP,2)) {
+					LOGOK "Ping Loxone: Miniserver2 is online.";
+					LOGOK "Ping Loxone: $p->ping($LOX_IP)";
+				} else {
+					LOGALERT "Ping Loxone: Miniserver2 not online!";
+					LOGDEB "Ping Loxone: $p->ping($LOX_IP)";
+					#Failback Variablen !!!
+					$LOX_IP = $miniservers{1}{IPAddress};
+					$LOX_User = $miniservers{1}{Admin};
+					$LOX_PW = $miniservers{1}{Pass};	
+				} 
+			}
+		$p->close();			
+}	
+$LoxHTTPGet_BASE = "http://$LOX_User:$LOX_PW\@$LOX_IP/dev/sps/io";
 
 
 

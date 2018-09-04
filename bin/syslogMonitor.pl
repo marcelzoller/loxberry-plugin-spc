@@ -33,9 +33,58 @@ $EDP_Port = %pcfg{'MAIN.EDP_Port'};
 $EDP_Port2 = $EDP_Port+1;
 $EDPZentralenID =  %pcfg{'MAIN.EDPZentralenID'};
 %miniservers = LoxBerry::System::get_miniservers();
+$LOX_Name = $miniservers{1}{Name};
 $LOX_IP = $miniservers{1}{IPAddress};
-$LOX_User = $miniservers{1}{Admin_RAW};
-$LOX_PW = $miniservers{1}{Pass_RAW};
+$LOX_User = $miniservers{1}{Admin};
+$LOX_PW = $miniservers{1}{Pass};
+
+
+# Loxone HA-Miniserver by Marcel Zoller	
+if($LOX_Name eq "lxZoller1"){
+	# Loxone Minisever ping test
+	#LOGOK " Loxone Zoller HA-Miniserver";
+	print "Loxone Zoller HA-Miniserver\n";
+	#$LOX_IP="172.16.200.7"; #Testvariable
+	#$LOX_IP='172.16.200.6'; #Testvariable
+	$p = Net::Ping->new();
+	$p->port_number("80");
+	if ($p->ping($LOX_IP,2)) {
+				#LOGOK "Ping Loxone: Miniserver1 is online.";
+				print "Ping Loxone: Miniserver1 is online.\n";
+				#LOGOK "Ping Loxone: $p->ping($LOX_IP)";
+				print "Ping Loxone: $p->ping($LOX_IP)\n";
+				$p->close();
+			} else{ 
+				#LOGALERT "Ping Loxone: Miniserver1 not online!";
+				print "Ping Loxone: Miniserver1 not online!\n";
+				#LOGDEB "Ping Loxone: $p->ping($LOX_IP)";
+				print "Ping Loxone: $p->ping($LOX_IP\n)";
+				$p->close();
+				
+				$p = Net::Ping->new();
+				$p->port_number("80");
+				$LOX_IP = $miniservers{2}{IPAddress};
+				$LOX_User = $miniservers{2}{Admin};
+				$LOX_PW = $miniservers{2}{Pass};
+				#$LOX_IP="172.16.200.6"; #Testvariable
+				if ($p->ping($LOX_IP,2)) {
+					#LOGOK "Ping Loxone: Miniserver2 is online.";
+					print "Ping Loxone: Miniserver2 is online.\n";
+					#LOGOK "Ping Loxone: $p->ping($LOX_IP)";
+					print "Ping Loxone: $p->ping($LOX_IP)\n";
+				} else {
+					#LOGALERT "Ping Loxone: Miniserver2 not online!";
+					print "Ping Loxone: Miniserver2 not online!\n";
+					#LOGDEB "Ping Loxone: $p->ping($LOX_IP)";
+					print  "Ping Loxone: $p->ping($LOX_IP)\n";
+					#Failback Variablen !!!
+					$LOX_IP = $miniservers{1}{IPAddress};
+					$LOX_User = $miniservers{1}{Admin};
+					$LOX_PW = $miniservers{1}{Pass};	
+				} 
+			}
+		$p->close();			
+}	
 $LoxHTTPGet_BASE = "http://$LOX_User:$LOX_PW\@$LOX_IP/dev/sps/io";
 
 my ($socket,$received_data);
