@@ -11,7 +11,10 @@ use LoxBerry::Log;
   
 # Die Version des Plugins wird direkt aus der Plugin-Datenbank gelesen.
 my $version = LoxBerry::System::pluginversion();
- 
+
+# Loxone Miniserver Select Liste Variable
+our $MSselectlist;
+
 # Mit dieser Konstruktion lesen wir uns alle POST-Parameter in den Namespace R.
 my $cgi = CGI->new;
 $cgi->import_names('R');
@@ -33,7 +36,9 @@ LoxBerry::Web::lbheader("SPC Plugin V$version", "http://www.loxwiki.eu/V-Zug/Zol
 # Wir holen uns die Plugin-Config in den Hash %pcfg. Damit kannst du die Parameter mit $pcfg{'Section.Label'} direkt auslesen.
 my %pcfg;
 tie %pcfg, "Config::Simple", "$lbpconfigdir/pluginconfig.cfg";
- 
+
+# Alle Miniserver aus Loxberry config auslesen
+%miniservers = LoxBerry::System::get_miniservers();
 
 # Wir initialisieren unser Template. Der Pfad zum Templateverzeichnis steht in der globalen Variable $lbptemplatedir.
 
@@ -105,11 +110,26 @@ my $HTTPSENDINTER = %pcfg{'MAIN.HTTP_TEXT_SEND_Intervall'};
 my $EDPPORT = %pcfg{'MAIN.EDP_Port'};
 my $EDPZentralenID = %pcfg{'MAIN.EDPZentralenID'};
 my $SERVICE = %pcfg{'MAIN.EDP_Server_runnig'};
+my $miniserver = %pcfg{'MAIN.MINISERVER'};
 
+%miniservers = LoxBerry::System::get_miniservers();
+#print "Anzahl deiner Miniserver: " . keys(%miniservers);
+
+##########################################################################
+# Fill Miniserver selection dropdown
+##########################################################################
+for (my $i = 1; $i <=  keys(%miniservers);$i++) {
+	if ("MINISERVER$i" eq $miniserver) {
+		$MSselectlist .= '<option selected value="'.$i.'">'.$miniservers{$i}{Name}."</option>\n";
+	} else {
+		$MSselectlist .= '<option value="'.$i.'">'.$miniservers{$i}{Name}."</option>\n";
+	}
+}
 
 
 $template->param( EDPZentralenID => $EDPZentralenID);
 $template->param( EDPPORT => $EDPPORT);
+$template->param(LOXLIST => $MSselectlist);
 $template->param( UDPPORT => $UDPPORT);
 $template->param( WEBSITE => "http://$ENV{HTTP_HOST}/plugins/$lbpplugindir/index.cgi");
 $template->param( WEBSITELOG => "http://$ENV{HTTP_HOST}/plugins/$lbpplugindir/doorlog.cgi");
@@ -181,6 +201,11 @@ sub save
 	if ($R::UDP_Port != "") {
 			#print "UDP_Port:$R::UDP_Port<br>\n";
 			$pcfg{'MAIN.UDP_Port'} = $R::UDP_Port;
+		}
+	if ($R::miniserver != "") {
+			#print "miniserver:$R::miniserver<br>\n";
+			$pcfg{'MAIN.MINISERVER'} = "MINISERVER".$R::miniserver;
+			# tied(%pcfg)->write();
 		} 
 	if ($R::UDP_Send == "1") {
 			LOGDEB "UDP Send: $R::UDP_Send";
