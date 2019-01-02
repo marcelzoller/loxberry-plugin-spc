@@ -31,7 +31,7 @@ LOGSTART "SPC HTTP start";
  
 # Wir Übergeben die Titelzeile (mit Versionsnummer), einen Link ins Wiki und das Hilfe-Template.
 # Um die Sprache der Hilfe brauchen wir uns im Code nicht weiter zu kümmern.
-LoxBerry::Web::lbheader("SPC Plugin V$version", "http://www.loxwiki.eu/V-Zug/Zoller", "help.html");
+LoxBerry::Web::lbheader("SPC Plugin $version", "https://www.loxwiki.eu/display/LOXBERRY/Vanderbilt+SPC+-+EDP-Protokoll", "help.html");
   
 # Wir holen uns die Plugin-Config in den Hash %pcfg. Damit kannst du die Parameter mit $pcfg{'Section.Label'} direkt auslesen.
 my %pcfg;
