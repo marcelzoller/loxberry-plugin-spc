@@ -70,4 +70,6 @@ cp -p -v -r /tmp/$PSHNAME\_upgrade/log/* $PLOG/
 echo "<INFO> Remove temporary folders"
 rm -r /tmp/$PSHNAME\_upgrade
 
+echo "<WARNING> Please start the service SPC new!"
+
 exit 0

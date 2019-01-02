@@ -111,6 +111,8 @@ my $EDPPORT = %pcfg{'MAIN.EDP_Port'};
 my $EDPZentralenID = %pcfg{'MAIN.EDPZentralenID'};
 my $SERVICE = %pcfg{'MAIN.EDP_Server_runnig'};
 my $miniserver = %pcfg{'MAIN.MINISERVER'};
+my $AUTOSTART = %pcfg{'MAIN.autostart'};
+
 
 %miniservers = LoxBerry::System::get_miniservers();
 #print "Anzahl deiner Miniserver: " . keys(%miniservers);
@@ -145,6 +147,17 @@ else  {
 	$template->param( SERVER => '<span style="color:red">stop</span>');
 	} 
 
+	
+	
+if ($AUTOSTART == 1) {
+		$template->param( AUTOSTART => "checked");
+		$template->param( AUTOSTARTYES => "selected");
+		$template->param( AUTOSTARTNO => "");
+	} else {
+		$template->param( AUTOSTART => " ");
+		$template->param( AUTOSTARTYES => "");
+		$template->param( AUTOSTARTNO => "selected");
+	} 	
 if ($UDPSEND == 1) {
 		$template->param( UDPSEND => "checked");
 		$template->param( UDPSENDYES => "selected");
@@ -214,7 +227,13 @@ sub save
 			LOGDEB "UDP Send: $R::UDP_Send";
 			$pcfg{'MAIN.UDP_Send_Enable'} = "0";
 		}
-		
+	if ($R::AUTOSTART == "1") {
+			LOGDEB "Autostart: $R::AUTOSTART";
+			$pcfg{'MAIN.autostart'} = "1";
+		} else{
+			LOGDEB "Autostart: $R::AUTOSTART";
+			$pcfg{'MAIN.autostart'} = "0";
+		}	
 	if ($R::HTTP_Send == "1") {
 			LOGDEB "HTTP Send: $R::HTTP_Send";
 			$pcfg{'MAIN.HTTP_Send_Enable'} = "1";

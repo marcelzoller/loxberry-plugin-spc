@@ -44,6 +44,27 @@
 							<font size="-1"><TMPL_VAR BASIC.SPC_HMINISERVER></font>
 						</td>
 					</tr>
+						<tr>
+						<td width="25%">
+							<label id="labelmsenabled"><b><TMPL_VAR BASIC.SPC_AUTOSTART></b></label>
+						</td>
+						<td width="50%">
+						<table border=0>
+							<tr><td>
+							  <fieldset>
+								 <select id="sendhtml" name="AUTOSTART" data-role="flipswitch" >
+									<option value="0"<TMPL_VAR NAME=AUTOSTARTNO>>Aus</option><option value="1" <TMPL_VAR NAME=AUTOSTARTYES>>Ein</option>\n
+								</select>  
+								
+							  </fieldset>
+							</td><td>
+						</table>
+						</td>
+						<td width="25%">
+							&nbsp;
+							<font size="-1"><TMPL_VAR BASIC.SPC_HAUTOSTART></font>
+						</td>
+					</tr>
 					<tr>
 						<td width="25%">
 							<label id="labelmsenabled"><b><TMPL_VAR BASIC.SPC_HTTPSEND></b></label>

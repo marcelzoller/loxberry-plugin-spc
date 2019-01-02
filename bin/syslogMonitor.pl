@@ -118,10 +118,6 @@ $sock = IO::Socket::INET->new(
 ) or die "Could not create socket watchdog prt: $!\n";
 
 print "\nEDP-Moniter by Marcel Zoller 2018 - V3.3 / Listening on port $EDP_Port / $EDPZentralenID\n";
-
-
-while(1)
-{
 # Create my logging object
 my $log = LoxBerry::Log->new ( 
 	name => 'syslogMonitor',
@@ -130,6 +126,8 @@ my $log = LoxBerry::Log->new (
 	);
 LOGSTART "SPC demand SyslogMonitor start";
 
+while(1)
+{
 
 # read operation on the socket
 $socket->recv($recieved_data,10000);
@@ -141,16 +139,16 @@ $recieved_data = decode('iso-8859-1',encode('utf-8', $recieved_data));
 #print "\n";
 
 # Deamon Watchdog 
-if(index($recieved_data,"TEST")!=-1){
-	print "WATCHDOG REV: TEST\n";
-	LOGDEB "WATCHDOG REV: $recieved_data";
-	$sock->send('TEST') or die "Send error: $!\n";
-	print "WATCHDOG SEND: TEST\n";
-	LOGDEB "WATCHDOG SEND: TEST";
+if(index($recieved_data,"WATCHDOG")!=-1){
+	print "WATCHDOG REV: WATCHDOG\n";
+	LOGINF "WATCHDOG REV: $recieved_data";
+	$sock->send('WATCHDOG') or die "Send error: $!\n";
+	print "WATCHDOG SEND: WATCHDOG\n";
+	LOGDEB "WATCHDOG SEND: WATCHDOG";
 }
 
 #print "$recieved_data   $datumtime \n"; 
-LOGDEB "RECIVED DATE: $recieved_data   $datumtime"; 
+LOGINF "RECIVED DATE: $recieved_data   $datumtime"; 
 	
 if(index($recieved_data,$EDPZentralenID)!=-1){ #EDP Zentralen-ID identifizieren 
 
@@ -411,7 +409,7 @@ if(index($recieved_data,$EDPZentralenID)!=-1){ #EDP Zentralen-ID identifizieren
 			}
 		}
 	}
-LOGEND "Operation finished sucessfully.";
+# LOGEND "Operation finished sucessfully.";
 }
 
 $socket->close();

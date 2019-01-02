@@ -13,6 +13,7 @@ my %pcfg;
 tie %pcfg, "Config::Simple", "$lbpconfigdir/pluginconfig.cfg";
 my $EDP_Port = %pcfg{'MAIN.EDP_Port'};
 my $EDP_Port2 = $EDP_Port+1;
+my $autostart = $pcfg{'MAIN.autostart'};
 
 my $socket;
 my $sock;
@@ -37,9 +38,10 @@ $sock = IO::Socket::INET->new(
     PeerAddr => '127.0.0.1',
 ) or die "Could not create socket: $!\n";
 
-$sock->send('TEST') or die "Send error: $!\n";
+$sock->send('WATCHDOG') or die "Send error: $!\n";
 
-
+print  "Autostart: $autostart \n ";
+	  
 
 #Timeout 10s recevie data
 eval {
@@ -53,7 +55,34 @@ eval {
   exit;
   alarm 0;
 };
+#alarm 0;
+
+# AUTOSTART nach einem neustart oder abstutz!
+# Start Deamen neu und prüfe noch einmal.
+if($autostart == 1){
+	LOGERR "Autostart";
+	print  "Autostart start";
+
+	system ("perl '$lbpbindir/spc-control.pl' start &");
+
+	$sock->send('WATCHDOG') or die "Send error: $!\n";
+
+
+	#Timeout 10s recevie data
+	eval {
+	  local $SIG{ALRM} = sub { die 'Timed Out'; };
+	  alarm 10;
+	  $socket->recv($recieved_data,1024);
+	  print "\nReceived data $recieved_data \n \n";
+	  
+	  $pcfg{'MAIN.UDP_Server_runnig'} = 1;
+	  tied(%pcfg)->write();
+	  exit;
+	  alarm 0;
+	};
+}
 alarm 0;
+
 
 print "ALARM!!!  UDP-Deamen not work.\n";
 $pcfg{'MAIN.EDP_Server_runnig'} = 0;
